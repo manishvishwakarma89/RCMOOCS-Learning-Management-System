@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /migrate
 
-COPY .db./.init_db.sql .
+COPY init_db.sql .
 
 # wait-for-pg + run migration in one shot
 CMD ["/bin/sh", "-c", "\

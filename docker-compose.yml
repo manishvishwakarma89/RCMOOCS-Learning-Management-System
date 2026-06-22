@@ -1,18 +1,19 @@
-version: '3.9'
-
 services:
   db:
     image: postgres:16-alpine
     container_name: rcmoocs_db
     restart: always
+    env_file:
+      - .env
     environment:
       POSTGRES_DB: rcmoocs_lms
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432"
     volumes:
-      - lms_postgres_data:/var/lib/postgresql/data   # ✅ matches existing volume
+      - lms_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -21,26 +22,38 @@ services:
     networks:
       - rcmoocs-net
 
-  web:
-    build: .
-    container_name: rcmoocs_web
-    restart: always
-    ports:
-      - "5002:5000"
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/rcmoocs_lms
-      SECRET_KEY: lms-secret-key-2024
+  migration:
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile.migrate
+    container_name: rcmoocs-migrations
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - .:/app
+    restart: "no"
+    networks:
+      - rcmoocs-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rcmoocs_lmsapp
+    restart: always
+    ports:
+      - "5003:5000"
+    env_file:
+      - .env
+    depends_on:
+      migration:
+        condition: service_completed_successfully
     networks:
       - rcmoocs-net
 
 volumes:
   lms_postgres_data:
-    external: true    # ✅ reuse existing volume, don't create new
 
 networks:
   rcmoocs-net:
