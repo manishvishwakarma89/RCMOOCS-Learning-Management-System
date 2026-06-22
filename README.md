@@ -12,7 +12,7 @@ pip install -r requirements.txt
 ### 2. Set up PostgreSQL
 ```sql
 -- In psql:
-CREATE DATABASE eduforge_lms;
+CREATE DATABASE rcmoocs_lms;
 ```
 
 ### 3. Configure environment
@@ -23,7 +23,7 @@ cp .env.example .env
 
 Example `.env`:
 ```
-DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/eduforge_lms
+DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/rcmoocs_lms
 SECRET_KEY=your-secret-key-here
 ```
 
@@ -38,12 +38,6 @@ python app.py
 ```
 
 Open http://localhost:5000
-
-## Demo Accounts (after seeding)
-| Email | Password | Subject |
-|---|---|---|
-| sarah@school.edu | pass123 | Mathematics |
-| james@school.edu | pass123 | Physics |
 
 ## Database Schema
 
