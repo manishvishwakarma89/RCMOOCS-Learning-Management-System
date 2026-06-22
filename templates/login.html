@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TLC Ramanujan | LMS Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Slab:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#1a2a4a; --navy-dark:#0f1d35; --gold:#e8960a; --gold-light:#f5a820;
+  --white:#ffffff; --bg:#f4f6f9; --border:#dde3ed; --muted:#6b7a99;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); font-family:'Roboto',sans-serif; min-height:100vh; display:flex; flex-direction:column; }
+
+.top-strip { background:var(--navy-dark); color:rgba(255,255,255,0.65); font-size:12px; padding:5px 0; text-align:center; }
+
+.site-header { background:var(--navy); padding:14px 0; box-shadow:0 2px 8px rgba(0,0,0,0.25); }
+.header-inner { max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; gap:20px; }
+.header-logo img { height:60px; }
+.brand-title { font-family:'Roboto Slab',serif; font-size:20px; font-weight:700; color:var(--white); }
+.brand-sub { font-size:12px; color:var(--gold-light); margin-top:3px; letter-spacing:1px; text-transform:uppercase; }
+
+.login-wrap { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px; }
+.login-grid { display:grid; grid-template-columns:1fr 420px; gap:0; max-width:860px; width:100%; border-radius:8px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.15); }
+
+.login-left { background:var(--navy); padding:44px 40px; display:flex; flex-direction:column; justify-content:space-between; }
+.login-left h2 { font-family:'Roboto Slab',serif; font-size:24px; font-weight:700; color:var(--white); margin-bottom:12px; }
+.login-left p { font-size:14px; color:rgba(255,255,255,0.65); line-height:1.6; }
+.login-gold-bar { width:48px; height:4px; background:var(--gold); border-radius:2px; margin-bottom:20px; }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:auto; padding-top:32px; }
+.mini-stat { background:rgba(255,255,255,0.08); border-radius:6px; padding:14px 12px; text-align:center; }
+.mini-stat-val { font-family:'Roboto Slab',serif; font-size:22px; font-weight:700; color:var(--gold); }
+.mini-stat-lbl { font-size:11px; color:rgba(255,255,255,0.55); margin-top:3px; text-transform:uppercase; letter-spacing:0.5px; }
+
+.login-right { background:var(--white); padding:40px 36px; }
+.login-right h3 { font-family:'Roboto Slab',serif; font-size:18px; font-weight:700; color:var(--navy); margin-bottom:4px; }
+.login-right p { font-size:13px; color:var(--muted); margin-bottom:28px; }
+
+.form-group { margin-bottom:18px; }
+label { display:block; font-size:13px; font-weight:500; color:var(--navy); margin-bottom:6px; }
+input { width:100%; border:1px solid var(--border); border-radius:4px; padding:10px 12px; font-size:14px; font-family:'Roboto',sans-serif; outline:none; transition:border-color 0.15s; }
+input:focus { border-color:var(--navy); box-shadow:0 0 0 3px rgba(26,42,74,0.1); }
+
+.btn-login { width:100%; padding:11px; background:var(--navy); color:var(--white); border:none; border-radius:4px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Roboto Slab',serif; letter-spacing:0.5px; transition:background 0.15s; }
+.btn-login:hover { background:var(--navy-dark); }
+
+.divider { border:none; border-top:1px solid var(--border); margin:24px 0; }
+.demo-box { background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:14px 16px; }
+.demo-box p { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+.demo-row { font-size:13px; color:var(--navy); margin-bottom:4px; }
+.demo-row span { color:var(--muted); }
+
+.flash { padding:10px 14px; border-radius:4px; margin-bottom:18px; font-size:13px; background:#f8d7da; color:#721c24; border-left:3px solid #dc3545; }
+
+.site-footer { background:var(--navy-dark); color:rgba(255,255,255,0.55); font-size:12px; text-align:center; padding:14px; border-top:3px solid var(--gold); }
+.site-footer a { color:var(--gold-light); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="top-strip">Teaching Learning Centre, Ramanujan College (University of Delhi) &nbsp;|&nbsp; Reaching the Unreached</div>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <img src="https://rcmoocs.in/static/images/du_100.png" alt="DU" onerror="this.style.display='none'">
+    </div>
+    <div>
+      <div class="brand-title">TLC Ramanujan — Learning Management System</div>
+      <div class="brand-sub">Ramanujan College &nbsp;·&nbsp; University of Delhi</div>
+    </div>
+  </div>
+</header>
+
+<div class="login-wrap">
+  <div class="login-grid">
+    <div class="login-left">
+      <div>
+        <div class="login-gold-bar"></div>
+        <h2>Welcome to the<br>Teacher Portal</h2>
+        <p>Manage your skills, create courses, and assess student progress — all in one place.</p>
+      </div>
+      <div class="stats-row">
+        <div class="mini-stat"><div class="mini-stat-val">151K+</div><div class="mini-stat-lbl">Teachers Trained</div></div>
+        <div class="mini-stat"><div class="mini-stat-val">311</div><div class="mini-stat-lbl">FDP Programmes</div></div>
+        <div class="mini-stat"><div class="mini-stat-val">29</div><div class="mini-stat-lbl">FIP Programmes</div></div>
+      </div>
+    </div>
+    <div class="login-right">
+      <h3>Sign In</h3>
+      <p>Enter your credentials to access the portal</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+      <form method="post">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="teacher@ramanujan.du.ac.in" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-login">Login →</button>
+      </form>
+      <hr class="divider">
+     
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  © RDSC Ramanujan College. All Rights Reserved. &nbsp;|&nbsp;
+  <a href="https://rcmoocs.in">rcmoocs.in</a> &nbsp;|&nbsp;
+  <a href="mailto:rcmoocs@ramanujan.du.ac.in">rcmoocs@ramanujan.du.ac.in</a>
+</footer>
+</body>
+</html>

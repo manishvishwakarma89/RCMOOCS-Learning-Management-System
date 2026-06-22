@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %} — Skills{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div style="display:flex;align-items:center">
+    <div class="page-header-divider"></div>
+    <div class="page-header-left">
+      <h1>Skills Library</h1>
+      <p>{{ skills|length }} skill{% if skills|length != 1 %}s{% endif %} in your library</p>
+    </div>
+  </div>
+  <a href="{{ url_for('add_skill') }}" class="btn btn-gold">+ Add Skill</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+
+{% if skills %}
+<div class="grid-3">
+  {% for skill in skills %}
+  <div class="skill-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+      <span class="badge {% if skill.level == 'Beginner' %}badge-success{% elif skill.level == 'Intermediate' %}badge-warning{% else %}badge-danger{% endif %}">
+        {{ skill.level }}
+      </span>
+      <span class="badge badge-info">{{ skill.category }}</span>
+    </div>
+    <div class="skill-title">{{ skill.title }}</div>
+    <div class="skill-desc">{{ skill.description }}</div>
+    <div class="skill-meta">
+      <span>◉ {{ skill.students }} students</span>
+      <span>⊞ {{ skill.resources }} resources</span>
+      {% if skill.rating and skill.rating > 0 %}
+      <span style="color:var(--gold)">★ {{ skill.rating }}</span>
+      {% endif %}
+    </div>
+    {% if skill.tags %}
+    <div style="margin-bottom:12px">
+      {% for tag in skill.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </div>
+    {% endif %}
+    <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Added: {{ skill.created }}</div>
+    <div class="skill-actions">
+      <a href="{{ url_for('edit_skill', skill_id=skill.id) }}" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">✎ Edit</a>
+      <form method="post" action="{{ url_for('delete_skill', skill_id=skill.id) }}" style="flex:1" onsubmit="return confirm('Delete this skill?')">
+        <button type="submit" class="btn btn-danger btn-sm" style="width:100%;justify-content:center">✕ Delete</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card">
+  <div class="card-body">
+    <div class="empty">
+      <div class="empty-icon">◈</div>
+      <div class="empty-title">No Skills Yet</div>
+      <div class="empty-sub">Start building your skill library for students</div>
+      <a href="{{ url_for('add_skill') }}" class="btn btn-gold">+ Add Your First Skill</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

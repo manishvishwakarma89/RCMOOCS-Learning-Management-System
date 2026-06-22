@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %} — Assessments{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div style="display:flex;align-items:center">
+    <div class="page-header-divider"></div>
+    <div class="page-header-left">
+      <h1>Assessments</h1>
+      <p>{{ assessments|length }} assessment{% if assessments|length != 1 %}s{% endif %} created</p>
+    </div>
+  </div>
+  <a href="{{ url_for('add_assessment') }}" class="btn btn-gold">+ New Assessment</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+
+{% if assessments %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">All Assessments</div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Type</th>
+          <th>Course</th>
+          <th>Due Date</th>
+          <th>Total Marks</th>
+          <th>Submissions</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in assessments %}
+        <tr>
+          <td style="font-weight:500;color:var(--navy)">{{ a.title }}</td>
+          <td>
+            <span class="badge {% if a.type == 'Quiz' %}badge-info{% elif a.type == 'Assignment' %}badge-navy{% elif a.type == 'Exam' %}badge-danger{% else %}badge-warning{% endif %}">
+              {{ a.type }}
+            </span>
+          </td>
+          <td style="font-size:13px;color:var(--muted)">{{ courses.get(a.course_id, '—') }}</td>
+          <td style="font-size:13px">{{ a.due_date }}</td>
+          <td style="font-weight:500">{{ a.total_marks }}</td>
+          <td>
+            <span style="color:var(--navy);font-weight:600">{{ a.submissions }}</span>
+          </td>
+          <td><span class="badge badge-success">{{ a.status }}</span></td>
+          <td>
+            <form method="post" action="{{ url_for('delete_assessment', assessment_id=a.id) }}" onsubmit="return confirm('Delete this assessment?')" style="display:inline">
+              <button type="submit" class="btn btn-danger btn-sm">✕ Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="card">
+  <div class="card-body">
+    <div class="empty">
+      <div class="empty-icon">✎</div>
+      <div class="empty-title">No Assessments Yet</div>
+      <div class="empty-sub">Create quizzes, assignments, and examinations for your courses</div>
+      <a href="{{ url_for('add_assessment') }}" class="btn btn-gold">+ Create Assessment</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

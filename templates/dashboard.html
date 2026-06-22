@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %} — Dashboard{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div style="display:flex;align-items:center">
+    <div class="page-header-divider"></div>
+    <div class="page-header-left">
+      <h1>Dashboard</h1>
+      <p>Welcome back, {{ teacher.name }} &nbsp;·&nbsp; {{ teacher.subject }}</p>
+    </div>
+  </div>
+  <a href="{{ url_for('add_skill') }}" class="btn btn-gold">+ Add New Skill</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon">◈</div>
+    <div><div class="stat-value">{{ stats.skills }}</div><div class="stat-label">Total Skills</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">⬡</div>
+    <div><div class="stat-value">{{ stats.courses }}</div><div class="stat-label">Courses</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">✎</div>
+    <div><div class="stat-value">{{ stats.assessments }}</div><div class="stat-label">Assessments</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">◉</div>
+    <div><div class="stat-value">{{ stats.students }}</div><div class="stat-label">Students Enrolled</div></div>
+  </div>
+</div>
+
+<div class="grid-2" style="margin-bottom:24px">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Recent Skills</div>
+      <a href="{{ url_for('skills') }}" class="btn btn-outline btn-sm">View All →</a>
+    </div>
+    <div class="card-body" style="padding:0">
+      {% if skills %}
+        <table>
+          <thead><tr><th>Skill Title</th><th>Category</th><th>Level</th><th>Students</th></tr></thead>
+          <tbody>
+            {% for skill in skills %}
+            <tr>
+              <td style="font-weight:500">{{ skill.title }}</td>
+              <td><span class="badge badge-info">{{ skill.category }}</span></td>
+              <td>
+                <span class="badge {% if skill.level == 'Beginner' %}badge-success{% elif skill.level == 'Intermediate' %}badge-warning{% else %}badge-danger{% endif %}">
+                  {{ skill.level }}
+                </span>
+              </td>
+              <td>{{ skill.students }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="empty" style="padding:30px">
+          <div class="empty-sub">No skills yet. <a href="{{ url_for('add_skill') }}" style="color:var(--navy)">Add your first skill →</a></div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Active Courses</div>
+      <a href="{{ url_for('courses') }}" class="btn btn-outline btn-sm">View All →</a>
+    </div>
+    <div class="card-body" style="padding:0">
+      {% if courses %}
+        <table>
+          <thead><tr><th>Course Title</th><th>Duration</th><th>Students</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for course in courses %}
+            <tr>
+              <td style="font-weight:500">{{ course.title }}</td>
+              <td style="color:var(--muted);font-size:13px">{{ course.duration }}</td>
+              <td>{{ course.students }}</td>
+              <td><span class="badge {% if course.status == 'active' %}badge-success{% else %}badge-warning{% endif %}">{{ course.status }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="empty" style="padding:30px">
+          <div class="empty-sub">No courses yet. <a href="{{ url_for('add_course') }}" style="color:var(--navy)">Create one →</a></div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="card" style="border-left:4px solid var(--gold)">
+  <div class="card-body" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+    <div>
+      <div style="font-family:'Roboto Slab',serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px">
+        Build Your Next Programme
+      </div>
+      <div style="font-size:13px;color:var(--muted)">Add skills, create courses, and design assessments for your students.</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="{{ url_for('add_skill') }}" class="btn btn-gold">+ Add Skill</a>
+      <a href="{{ url_for('add_course') }}" class="btn btn-primary">+ Create Course</a>
+      <a href="{{ url_for('add_assessment') }}" class="btn btn-outline">+ Assessment</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

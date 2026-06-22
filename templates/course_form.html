@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %} — {{ action }} Course{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div style="display:flex;align-items:center">
+    <div class="page-header-divider"></div>
+    <div class="page-header-left">
+      <h1>{{ action }} Course</h1>
+      <p>Build a structured learning programme from your skills</p>
+    </div>
+  </div>
+  <a href="{{ url_for('courses') }}" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.4)">← Back to Courses</a>
+</div>
+
+<div class="card" style="max-width:720px">
+  <div class="card-header">
+    <div class="card-title">Course Details</div>
+  </div>
+  <div class="card-body">
+    <form method="post">
+      <div class="form-section">
+        <div class="form-section-title">Basic Information</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Course Title *</label>
+            <input type="text" name="title" placeholder="e.g. Algebra Mastery Programme" required value="{{ course.title if course else '' }}">
+          </div>
+          <div class="form-group full">
+            <label>Description</label>
+            <textarea name="description" placeholder="What will students gain from this course?">{{ course.description if course else '' }}</textarea>
+          </div>
+          <div class="form-group">
+            <label>Duration</label>
+            <input type="text" name="duration" placeholder="e.g. 8 weeks / 2 months" value="{{ course.duration if course else '' }}">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select name="status">
+              <option value="draft" {% if course and course.status == 'draft' %}selected{% endif %}>Draft</option>
+              <option value="active" {% if course and course.status == 'active' %}selected{% endif %}>Active</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Linked Skills</div>
+        {% if skills %}
+          <div class="form-group">
+            <label>Select Skills <span style="font-weight:400;color:var(--muted)">(hold Ctrl/Cmd for multiple)</span></label>
+            <select name="skill_ids" multiple style="min-height:130px">
+              {% for skill in skills %}
+              <option value="{{ skill.id }}" {% if course and skill in course.skills %}selected{% endif %}>
+                {{ skill.title }} — {{ skill.level }} — {{ skill.category }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% else %}
+          <div style="padding:14px;background:var(--warning-bg);border:1px solid #ffc107;border-radius:4px;font-size:13px;color:var(--warning)">
+            ⚠ No skills found. <a href="{{ url_for('add_skill') }}" style="color:var(--navy);font-weight:500">Add skills first →</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)">
+        <a href="{{ url_for('courses') }}" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn btn-gold">{{ action }} Course</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

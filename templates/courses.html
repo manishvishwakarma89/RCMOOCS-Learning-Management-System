@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %} — Courses{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div style="display:flex;align-items:center">
+    <div class="page-header-divider"></div>
+    <div class="page-header-left">
+      <h1>Courses</h1>
+      <p>{{ courses|length }} course{% if courses|length != 1 %}s{% endif %} created</p>
+    </div>
+  </div>
+  <a href="{{ url_for('add_course') }}" class="btn btn-gold">+ New Course</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+
+{% if courses %}
+<div class="grid-3">
+  {% for course in courses %}
+  <div class="course-card">
+    <div class="course-card-header">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span class="badge {% if course.status == 'active' %}badge-success{% else %}badge-warning{% endif %}">{{ course.status }}</span>
+        <span style="font-size:11px;color:rgba(255,255,255,0.55)">{{ course.duration }}</span>
+      </div>
+      <h3>{{ course.title }}</h3>
+      <p>{{ course.description }}</p>
+    </div>
+    <div class="course-card-body">
+      <div style="font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px">
+        <div>◉ <strong>{{ course.students }}</strong> students enrolled</div>
+        <div>◈ <strong>{{ course.skills|length }}</strong> skill{% if course.skills|length != 1 %}s{% endif %} linked</div>
+        <div style="font-size:11px;margin-top:4px">Created: {{ course.created }}</div>
+      </div>
+      {% if course.skills %}
+      <div style="margin-top:12px">
+        {% for skill in course.skills %}<span class="tag">{{ skill.title }}</span>{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    <div class="course-card-footer">
+      <span style="font-size:11px;color:var(--muted)">ID: {{ course.id }}</span>
+      <div style="display:flex;gap:8px">
+        <a href="{{ url_for('edit_course', course_id=course.id) }}" class="btn btn-outline btn-sm">✎ Edit</a>
+        <form method="post" action="{{ url_for('delete_course', course_id=course.id) }}" onsubmit="return confirm('Delete this course?')">
+          <button type="submit" class="btn btn-danger btn-sm">✕</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card">
+  <div class="card-body">
+    <div class="empty">
+      <div class="empty-icon">⬡</div>
+      <div class="empty-title">No Courses Yet</div>
+      <div class="empty-sub">Create your first course by combining skills into a structured programme</div>
+      <a href="{{ url_for('add_course') }}" class="btn btn-gold">+ Create Course</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

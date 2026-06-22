@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TLC Ramanujan | LMS{% block title %}{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Slab:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1a2a4a;
+  --navy-dark: #0f1d35;
+  --navy-light: #253d6b;
+  --gold: #e8960a;
+  --gold-light: #f5a820;
+  --gold-pale: #fef3d0;
+  --white: #ffffff;
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --border: #dde3ed;
+  --text: #1a2a4a;
+  --muted: #6b7a99;
+  --success: #1e7e34;
+  --success-bg: #d4edda;
+  --warning: #856404;
+  --warning-bg: #fff3cd;
+  --danger: #721c24;
+  --danger-bg: #f8d7da;
+  --info-bg: #e8eef8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Roboto',sans-serif; min-height:100vh; }
+
+/* Top strip */
+.top-strip {
+  background:var(--navy-dark); color:rgba(255,255,255,0.7);
+  font-size:12px; padding:5px 0; text-align:center; letter-spacing:0.3px;
+}
+
+/* Header */
+.site-header {
+  background:var(--navy); padding:12px 0;
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);
+}
+.header-inner {
+  max-width:1200px; margin:0 auto; padding:0 24px;
+  display:flex; align-items:center; gap:20px;
+}
+.header-logo img { height:60px; width:auto; }
+.header-brand { flex:1; }
+.brand-title {
+  font-family:'Roboto Slab',serif; font-size:20px; font-weight:700;
+  color:var(--white); letter-spacing:0.3px; line-height:1.2;
+}
+.brand-sub {
+  font-size:12px; color:var(--gold-light); margin-top:3px;
+  letter-spacing:1px; text-transform:uppercase;
+}
+.header-badge {
+  background:var(--gold); color:var(--navy-dark); padding:6px 16px;
+  border-radius:4px; font-size:12px; font-weight:700; letter-spacing:0.5px;
+  text-transform:uppercase; white-space:nowrap;
+}
+
+/* Navbar */
+.navbar {
+  background:var(--gold); box-shadow:0 2px 4px rgba(0,0,0,0.15);
+}
+.navbar-inner {
+  max-width:1200px; margin:0 auto; padding:0 24px;
+  display:flex; align-items:center; gap:2px;
+}
+.nav-link {
+  display:flex; align-items:center; gap:6px; padding:12px 16px;
+  color:var(--navy-dark); font-size:13px; font-weight:500;
+  text-decoration:none; transition:background 0.15s; white-space:nowrap;
+  border-bottom:3px solid transparent;
+}
+.nav-link:hover { background:rgba(0,0,0,0.1); }
+.nav-link.active { background:rgba(0,0,0,0.12); border-bottom-color:var(--navy); font-weight:700; }
+.nav-icon { font-size:15px; }
+.nav-spacer { flex:1; }
+.nav-user {
+  display:flex; align-items:center; gap:8px; padding:8px 14px;
+  font-size:13px; color:var(--navy-dark); font-weight:500;
+}
+.nav-avatar {
+  width:30px; height:30px; border-radius:50%;
+  background:var(--navy); color:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700;
+}
+.nav-logout {
+  padding:6px 14px; background:var(--navy); color:var(--white);
+  border-radius:4px; font-size:12px; font-weight:500;
+  text-decoration:none; transition:background 0.15s;
+}
+.nav-logout:hover { background:var(--navy-dark); }
+
+/* Layout */
+.page-wrapper { max-width:1200px; margin:0 auto; padding:28px 24px; }
+
+/* Page header */
+.page-header {
+  background:var(--navy); color:var(--white);
+  padding:20px 24px; margin-bottom:24px; border-radius:6px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.page-header-left h1 {
+  font-family:'Roboto Slab',serif; font-size:20px; font-weight:700;
+  color:var(--white);
+}
+.page-header-left p { font-size:13px; color:rgba(255,255,255,0.7); margin-top:4px; }
+.page-header-divider {
+  width:3px; height:36px; background:var(--gold); border-radius:2px; margin-right:16px;
+}
+
+/* Stats */
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.stat-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:6px; padding:20px; display:flex; align-items:center; gap:16px;
+  border-left:4px solid var(--gold);
+}
+.stat-card:nth-child(2) { border-left-color:#2e86ab; }
+.stat-card:nth-child(3) { border-left-color:#28a745; }
+.stat-card:nth-child(4) { border-left-color:#6f42c1; }
+.stat-icon {
+  width:48px; height:48px; border-radius:6px;
+  background:var(--gold-pale); color:var(--gold);
+  display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;
+}
+.stat-card:nth-child(2) .stat-icon { background:#e8f4f8; color:#2e86ab; }
+.stat-card:nth-child(3) .stat-icon { background:#d4edda; color:#28a745; }
+.stat-card:nth-child(4) .stat-icon { background:#ede7f6; color:#6f42c1; }
+.stat-value { font-family:'Roboto Slab',serif; font-size:28px; font-weight:700; color:var(--navy); line-height:1; }
+.stat-label { font-size:12px; color:var(--muted); margin-top:4px; text-transform:uppercase; letter-spacing:0.5px; }
+
+/* Cards */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:6px; }
+.card-header {
+  padding:14px 20px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--info-bg); border-radius:6px 6px 0 0;
+}
+.card-title {
+  font-family:'Roboto Slab',serif; font-size:14px; font-weight:600;
+  color:var(--navy); display:flex; align-items:center; gap:8px;
+}
+.card-title::before { content:''; width:3px; height:16px; background:var(--gold); border-radius:2px; }
+.card-body { padding:20px; }
+
+/* Table */
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+thead { background:var(--navy); }
+th { padding:11px 16px; text-align:left; color:var(--white); font-size:12px; font-weight:500; letter-spacing:0.5px; text-transform:uppercase; }
+td { padding:12px 16px; border-bottom:1px solid var(--border); vertical-align:middle; }
+tbody tr:hover { background:var(--info-bg); }
+tbody tr:last-child td { border-bottom:none; }
+
+/* Buttons */
+.btn {
+  display:inline-flex; align-items:center; gap:6px; padding:8px 18px;
+  border-radius:4px; font-size:13px; font-weight:500; cursor:pointer;
+  border:1px solid transparent; text-decoration:none; font-family:'Roboto',sans-serif;
+  transition:all 0.15s;
+}
+.btn-primary { background:var(--navy); color:var(--white); border-color:var(--navy); }
+.btn-primary:hover { background:var(--navy-dark); }
+.btn-gold { background:var(--gold); color:var(--navy-dark); border-color:var(--gold); font-weight:700; }
+.btn-gold:hover { background:var(--gold-light); }
+.btn-outline { background:transparent; color:var(--navy); border-color:var(--border); }
+.btn-outline:hover { border-color:var(--navy); background:var(--info-bg); }
+.btn-danger { background:#dc3545; color:var(--white); border-color:#dc3545; }
+.btn-danger:hover { background:#c82333; }
+.btn-sm { padding:5px 12px; font-size:12px; }
+
+/* Badges */
+.badge { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+.badge-success { background:var(--success-bg); color:var(--success); }
+.badge-warning { background:var(--warning-bg); color:var(--warning); }
+.badge-danger { background:var(--danger-bg); color:var(--danger); }
+.badge-info { background:#cfe2ff; color:#084298; }
+.badge-navy { background:var(--navy); color:var(--white); }
+
+/* Forms */
+.form-section { margin-bottom:24px; }
+.form-section-title {
+  font-family:'Roboto Slab',serif; font-size:13px; font-weight:600;
+  color:var(--navy); padding-bottom:10px; margin-bottom:16px;
+  border-bottom:2px solid var(--gold); display:inline-block;
+}
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full { grid-column:1/-1; }
+label { font-size:13px; font-weight:500; color:var(--navy); }
+input, select, textarea {
+  border:1px solid var(--border); border-radius:4px;
+  padding:9px 12px; font-size:14px; font-family:'Roboto',sans-serif;
+  color:var(--text); background:var(--white); outline:none; transition:border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color:var(--navy); box-shadow:0 0 0 3px rgba(26,42,74,0.1); }
+textarea { resize:vertical; min-height:90px; }
+
+/* Tags */
+.tag {
+  display:inline-block; padding:3px 10px; background:var(--info-bg);
+  border:1px solid var(--border); border-radius:12px; font-size:11px; color:var(--navy); margin:2px;
+}
+
+/* Flash */
+.flash { padding:12px 16px; border-radius:4px; margin-bottom:20px; font-size:14px; display:flex; align-items:center; gap:10px; border-left:4px solid; }
+.flash-success { background:var(--success-bg); color:var(--success); border-color:var(--success); }
+.flash-error { background:var(--danger-bg); color:var(--danger); border-color:#dc3545; }
+.flash-info { background:#cfe2ff; color:#084298; border-color:#084298; }
+
+/* Skill / Course cards */
+.skill-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:6px;
+  padding:20px; transition:box-shadow 0.15s, border-color 0.15s;
+  border-top:3px solid var(--gold);
+}
+.skill-card:hover { box-shadow:0 4px 16px rgba(26,42,74,0.12); border-color:var(--navy); }
+.skill-title { font-family:'Roboto Slab',serif; font-size:15px; font-weight:600; color:var(--navy); margin-bottom:8px; }
+.skill-desc { font-size:13px; color:var(--muted); line-height:1.5; margin-bottom:14px; }
+.skill-meta { font-size:12px; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap; margin-bottom:14px; }
+.skill-meta span { display:flex; align-items:center; gap:4px; }
+.skill-actions { display:flex; gap:8px; padding-top:14px; border-top:1px solid var(--border); }
+
+.course-card { background:var(--surface); border:1px solid var(--border); border-radius:6px; overflow:hidden; transition:box-shadow 0.15s; }
+.course-card:hover { box-shadow:0 4px 16px rgba(26,42,74,0.12); }
+.course-card-header { background:var(--navy); padding:16px 20px; }
+.course-card-header h3 { font-family:'Roboto Slab',serif; font-size:15px; font-weight:600; color:var(--white); margin-bottom:4px; }
+.course-card-header p { font-size:12px; color:rgba(255,255,255,0.65); }
+.course-card-body { padding:16px 20px; }
+.course-card-footer { padding:12px 20px; background:var(--info-bg); border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+
+/* Empty state */
+.empty { text-align:center; padding:60px 20px; }
+.empty-icon { font-size:48px; color:var(--border); margin-bottom:16px; }
+.empty-title { font-family:'Roboto Slab',serif; font-size:18px; color:var(--navy); margin-bottom:8px; }
+.empty-sub { font-size:14px; color:var(--muted); margin-bottom:24px; }
+
+/* Grid helpers */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+
+/* Footer */
+.site-footer {
+  background:var(--navy-dark); color:rgba(255,255,255,0.6);
+  font-size:12px; text-align:center; padding:16px;
+  margin-top:40px; border-top:3px solid var(--gold);
+}
+.site-footer a { color:var(--gold-light); text-decoration:none; }
+</style>
+{% block extra_styles %}{% endblock %}
+</head>
+<body>
+
+<div class="top-strip">
+  Teaching Learning Centre, Ramanujan College (University of Delhi) &nbsp;|&nbsp; Reaching the Unreached
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <img src="https://rcmoocs.in/static/images/du_100.png" alt="Delhi University" onerror="this.style.display='none'">
+    </div>
+    <div class="header-brand">
+      <div class="brand-title">TLC Ramanujan — Learning Management System</div>
+      <div class="brand-sub">Ramanujan College &nbsp;·&nbsp; University of Delhi</div>
+    </div>
+    <div class="header-badge">Teacher Portal</div>
+  </div>
+</header>
+
+{% if session.teacher_id %}
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+      <span class="nav-icon">⊞</span> Dashboard
+    </a>
+    <a href="{{ url_for('skills') }}" class="nav-link {% if 'skill' in request.endpoint %}active{% endif %}">
+      <span class="nav-icon">◈</span> Skills
+    </a>
+    <a href="{{ url_for('courses') }}" class="nav-link {% if 'course' in request.endpoint %}active{% endif %}">
+      <span class="nav-icon">⬡</span> Courses
+    </a>
+    <a href="{{ url_for('assessments') }}" class="nav-link {% if 'assessment' in request.endpoint %}active{% endif %}">
+      <span class="nav-icon">✎</span> Assessments
+    </a>
+    <div class="nav-spacer"></div>
+    {% if teacher %}
+    <div class="nav-user">
+      <div class="nav-avatar">{{ teacher.avatar }}</div>
+      {{ teacher.name.split()[0] }}
+    </div>
+    {% endif %}
+    <a href="{{ url_for('logout') }}" class="nav-logout">Sign Out</a>
+  </div>
+</nav>
+{% endif %}
+
+<div class="page-wrapper">
+  {% block content %}{% endblock %}
+</div>
+
+<footer class="site-footer">
+  © RDSC Ramanujan College. All Rights Reserved. &nbsp;|&nbsp;
+  <a href="https://rcmoocs.in">rcmoocs.in</a> &nbsp;|&nbsp;
+  <a href="mailto:rcmoocs@ramanujan.du.ac.in">rcmoocs@ramanujan.du.ac.in</a>
+</footer>
+
+</body>
+</html>

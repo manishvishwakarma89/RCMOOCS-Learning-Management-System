@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %} — {{ action }} Skill{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div style="display:flex;align-items:center">
+    <div class="page-header-divider"></div>
+    <div class="page-header-left">
+      <h1>{{ action }} Skill</h1>
+      <p>{% if skill %}Editing: {{ skill.title }}{% else %}Add a new skill to your library{% endif %}</p>
+    </div>
+  </div>
+  <a href="{{ url_for('skills') }}" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.4)">← Back to Skills</a>
+</div>
+
+<div class="card" style="max-width:720px">
+  <div class="card-header">
+    <div class="card-title">Skill Information</div>
+  </div>
+  <div class="card-body">
+    <form method="post">
+      <div class="form-section">
+        <div class="form-section-title">Basic Details</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Skill Title *</label>
+            <input type="text" name="title" placeholder="e.g. Quadratic Equations" required value="{{ skill.title if skill else '' }}">
+          </div>
+          <div class="form-group full">
+            <label>Description</label>
+            <textarea name="description" placeholder="What will students learn from this skill?">{{ skill.description if skill else '' }}</textarea>
+          </div>
+          <div class="form-group">
+            <label>Proficiency Level *</label>
+            <select name="level">
+              <option value="Beginner" {% if skill and skill.level == 'Beginner' %}selected{% endif %}>Beginner</option>
+              <option value="Intermediate" {% if skill and skill.level == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+              <option value="Advanced" {% if skill and skill.level == 'Advanced' %}selected{% endif %}>Advanced</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Category / Subject Area</label>
+            <input type="text" name="category" placeholder="e.g. Algebra, Mechanics, Grammar" value="{{ skill.category if skill else '' }}">
+          </div>
+          <div class="form-group">
+            <label>Number of Resources</label>
+            <input type="number" name="resources" placeholder="0" min="0" value="{{ skill.resources if skill else '' }}">
+          </div>
+          <div class="form-group">
+            <label>Tags <span style="font-weight:400;color:var(--muted)">(comma-separated)</span></label>
+            <input type="text" name="tags" placeholder="e.g. algebra, equations, problem-solving" value="{{ skill.tags|join(', ') if skill and skill.tags else '' }}">
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)">
+        <a href="{{ url_for('skills') }}" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn btn-gold">{{ action }} Skill</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
