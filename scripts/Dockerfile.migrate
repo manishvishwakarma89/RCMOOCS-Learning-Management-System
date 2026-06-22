@@ -1,0 +1,28 @@
+# Dockerfile.migrate
+# ---------------------------------------------------------------
+# Lightweight migration container.
+# Waits for Postgres to be ready, then runs init_db.sql.
+# Usage (standalone):
+#   docker build -f Dockerfile.migrate -t rcmoocs-migrate .
+#   docker run --rm \
+#     -e DATABASE_URL=postgresql://postgres:password@db:5432/rcmoocs_lms \
+#     --network your_network \
+#     rcmoocs-migrate
+# ---------------------------------------------------------------
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /migrate
+
+COPY .db./.init_db.sql .
+
+# wait-for-pg + run migration in one shot
+CMD ["/bin/sh", "-c", "\
+  echo 'Waiting for PostgreSQL...' && \
+  until pg_isready -d \"$DATABASE_URL\" -q; do sleep 1; done && \
+  echo 'Running migrations...' && \
+  psql \"$DATABASE_URL\" -f init_db.sql && \
+  echo 'Migration complete.'"]

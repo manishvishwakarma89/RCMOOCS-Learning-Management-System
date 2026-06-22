@@ -1,4 +1,4 @@
-# EduForge LMS — Flask + PostgreSQL
+# RCMOOCS LMS — Flask + PostgreSQL
 
 A Learning Management System for teachers built with Flask and PostgreSQL.
 

@@ -1,20 +1,44 @@
-FROM python:3.11-slim
+# Stage 1: Builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
-#install dependecies
-# Install system dependencies
+
+# Install system dependencies for psycopg2
 RUN apt-get update && apt-get install -y \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
+
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --target=/app/deps
 
-# copy file
+# Copy application code
 COPY . .
-#EXPOSE PORT
-EXPOSE 5000
-#start the app
-CMD ["python","app.py"]
 
+
+# Stage 2: Runner
+FROM python:3.11-alpine AS runner
+
+WORKDIR /app
+
+# Install libpq runtime library (required by psycopg2 on Alpine)
+RUN apk add --no-cache libpq
+
+# Copy installed dependencies from builder
+COPY --from=builder /app/deps ./deps
+
+# Copy application files
+COPY --from=builder /app/app.py .
+COPY --from=builder /app/models.py .
+COPY --from=builder /app/static ./static
+COPY --from=builder /app/templates ./templates
+COPY --from=builder /app/public ./public
+
+ENV PYTHONPATH="/app/deps"
+ENV PYTHON_ENV=production
+ENV PORT=5000
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
