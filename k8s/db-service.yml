@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rcmoocs-db-service
+  namespace: lmsapp
+spec:
+  selector:
+    app: rcmoocs-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      #targetPort: 5432
+  type: ClusterIP
