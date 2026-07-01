@@ -1,22 +1,75 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lmsapp-deploy
+  name: lmsapp-deployment
   namespace: lmsapp
-  labels:
-    app: lmsapp-web
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: lmsapp-web
+      app: lmsapp
   template:
     metadata:
       labels:
-        app: lmsapp-web
+        app: lmsapp
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox
+          command: ['sh', '-c', 'until nc -z rcmoocs-db-service 5432;
+                    do echo "Waiting for DB..."; sleep 3; done']
       containers:
-      - name: lmsapp-web
-        image: manishvishwa801/lms-web:latest
-        ports:
-        - containerPort: 5002
+        - name: lms-web
+          image: manishvishwa801/lms-web:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: lmsapp-config
+                  key: DATABASE_URL
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: lmsapp-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: lmsapp-config
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: lmsapp-config
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: lmsapp-config
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DATASOURCE_PASSWORD
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 5
