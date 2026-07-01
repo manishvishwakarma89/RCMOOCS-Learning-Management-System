@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rcmoocs-db
+  namespace: lmsapp
+  labels:
+    app: rcmoocs-db
+spec:
+  containers:
+    - name: postgres
+      image: postgres:15
+      ports:
+        - containerPort: 5432
+      env:
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "supersecret"
+        - name: POSTGRES_DB
+          value: "rcmoocs_lms"

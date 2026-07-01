@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lmsapp-config
+  namespace: lmsapp
+data:
+  DATABASE_URL: "postgresql://postgres:supersecret@rcmoocs-db-service:5432/rcmoocs_lms"
+  DB_HOST: "rcmoocs-db-service"    # ← fixed (was DATABASE_URL)
+  DB_PORT: "5432"
+  DB_NAME: "rcmoocs_lms"
+  DB_USER: "postgres"
+  POSTGRES_DATABASE: "rcmoocs_lms"

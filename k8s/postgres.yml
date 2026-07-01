@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rcmoocs-db
+  namespace: lmsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rcmoocs-db
+  template:
+    metadata:
+      labels:
+        app: rcmoocs-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: rcmoocs_lms
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DATASOURCE_PASSWORD
+          volumeMounts:
+            - name: db-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: rcmoocs-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rcmoocs-db-service
+  namespace: lmsapp
+spec:
+  selector:
+    app: rcmoocs-db
+  ports:
+    - port: 5432
+      targetPort: 5432
